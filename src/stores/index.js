@@ -1,9 +1,15 @@
 import { createStore } from 'vuex'
 
 const store = createStore({
-  state: {},
+  state: {
+    visitorName: ''
+  },
 
-  mutations: {},
+  mutations: {
+    setVisitorName(state, name) {
+      state.visitorName = name
+    }
+  },
 
   actions: {}
 })

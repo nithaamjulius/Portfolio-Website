@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar">
-    <RouterLink to="/">Home</RouterLink>
+    <RouterLink to="/home">Home</RouterLink>
     <RouterLink to="/about">About</RouterLink>
     <RouterLink to="/projects">Projects</RouterLink>
     <RouterLink to="/skills">Skills</RouterLink>
