@@ -446,11 +446,6 @@
                 although I couldn’t name half of them anymore.
               </p>
 
-              <div class="journal-about__interest-note">
-                Most games: YES.<br />
-                FIFA / COD: no shade. 😭
-              </div>
-
             </article>
 
             <!-- MOVIES & TV -->
@@ -570,7 +565,7 @@
               class="journal-about__interest-card journal-about__interest-card--other"
             >
               <div class="journal-about__interest-icon">
-                ✦
+                🎲
               </div>
 
               <span class="journal-about__interest-label">
@@ -628,57 +623,79 @@
         </div>
 
         <!-- =========================================
-             NEXT ENTRY
+             NAVIGATION
              ========================================= -->
 
-        <section class="journal-about__continue">
+        <section class="journal-about__navigation">
 
-          <div class="journal-about__continue-copy">
+          <button
+            type="button"
+            class="journal-about__back-button"
+            @click="goToHome"
+          >
+            <strong>
+              ←
+            </strong>
 
-            <span class="journal-about__continue-small">
-              NEXT ENTRY
+            <span>
+              BACK TO ENTRY 01
             </span>
+          </button>
 
-            <h2>
-              Okay, enough about me.
-            </h2>
+          <!-- =========================================
+               NEXT ENTRY
+               ========================================= -->
 
-            <p>
-              Let’s look at the things I’ve actually built.
-            </p>
+          <section class="journal-about__continue">
 
-            <button
-              type="button"
-              class="journal-about__turn-button"
-              @click="goToProjects"
+            <div class="journal-about__continue-copy">
+
+              <span class="journal-about__continue-small">
+                NEXT ENTRY
+              </span>
+
+              <h2>
+                Okay, enough about me.
+              </h2>
+
+              <p>
+                Let’s look at the things I’ve actually built.
+              </p>
+
+              <button
+                type="button"
+                class="journal-about__turn-button"
+                @click="goToProjects"
+              >
+                <span>
+                  VIEW PROJECTS
+                </span>
+
+                <strong>
+                  →
+                </strong>
+              </button>
+
+            </div>
+
+            <div
+              class="journal-sticker journal-sticker--projects"
+              aria-hidden="true"
             >
               <span>
-                VIEW PROJECTS
+                NEXT
               </span>
 
               <strong>
-                →
+                PROJECTS
               </strong>
-            </button>
 
-          </div>
+              <small>
+                ENTRY 03
+              </small>
+            </div>
 
-          <div
-            class="journal-sticker journal-sticker--projects"
-            aria-hidden="true"
-          >
-            <span>
-              NEXT
-            </span>
-
-            <strong>
-              PROJECTS
-            </strong>
-
-            <small>
-              ENTRY 03
-            </small>
-          </div>
+          </section>
 
         </section>
 
@@ -710,6 +727,21 @@ const navigateWithTransition =
   inject(
     'navigateWithTransition'
   )
+
+function goToHome() {
+  if (
+    navigateWithTransition
+  ) {
+    navigateWithTransition(
+      '/home'
+    )
+
+    return
+  }
+
+  window.location.href =
+    '/home'
+}
 
 function goToProjects() {
   if (
@@ -1674,6 +1706,57 @@ function goToProjects() {
 }
 
 /* =========================================
+   NAVIGATION
+   ========================================= */
+
+.journal-about__navigation {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(3rem, 6vw, 5rem);
+}
+
+.journal-about__back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  justify-self: start;
+  padding:
+    0.7rem
+    1rem;
+  border:
+    1px solid
+    rgba(35, 36, 36, 0.2);
+  background:
+    rgba(255, 255, 255, 0.28);
+  color:
+    var(--welcome-brown);
+  cursor: pointer;
+  font-family: var(--font-google-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.journal-about__back-button:hover {
+  background:
+    rgba(255, 255, 255, 0.42);
+  transform:
+    translateY(-2px)
+    rotate(0.5deg);
+  box-shadow:
+    0 7px 14px
+      rgba(35, 36, 36, 0.1);
+}
+
+.journal-about__back-button strong {
+  color: #8e66a9;
+  font-size: 1.05rem;
+}
+
+/* =========================================
    NEXT ENTRY
    ========================================= */
 
@@ -1683,8 +1766,6 @@ function goToProjects() {
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  margin-top:
-    clamp(3rem, 6vw, 5rem);
   padding:
     clamp(2rem, 4vw, 3.5rem);
   border:
@@ -1922,6 +2003,15 @@ function goToProjects() {
 
   .journal-about__interest-card {
     min-height: 0;
+  }
+
+  .journal-about__navigation {
+    gap: 1.25rem;
+  }
+
+  .journal-about__back-button {
+    width: 100%;
+    justify-content: center;
   }
 
   .journal-about__footer {
