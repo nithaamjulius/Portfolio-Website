@@ -535,58 +535,28 @@
         </div>
 
         <!-- =========================================
-             NEXT ENTRY
+             NAVIGATION
              ========================================= -->
 
-        <section
-          class="journal-home__continue"
-        >
+        <section class="journal-home__navigation">
 
-          <div class="journal-home__continue-note">
-
-            <span
-              class="journal-home__continue-small"
-            >
-              NEXT ENTRY
-            </span>
-
-            <h2>
-              Ready to turn the page?
-            </h2>
-
-            <p>
-              Continue into the next chapter of this journal
-              and learn more about me.
-            </p>
-
-            <button
-              type="button"
-              class="journal-home__turn-button"
-              @click="goToAbout"
-            >
-              <span>
-                TURN THE PAGE
-              </span>
-
-              <strong>
-                →
-              </strong>
-            </button>
-
-          </div>
-
-          <div
-            class="journal-sticker journal-sticker--keep-going"
-            aria-hidden="true"
+          <button
+            type="button"
+            class="journal-home__nav-button journal-home__nav-button--back"
+            @click="goToIntro"
           >
-            <span>
-              KEEP
-            </span>
+            <span>←</span>
+            BACK TO INTRO
+          </button>
 
-            <strong>
-              GOING
-            </strong>
-          </div>
+          <button
+            type="button"
+            class="journal-home__nav-button"
+            @click="goToAbout"
+          >
+            NEXT ENTRY
+            <span>→</span>
+          </button>
 
         </section>
 
@@ -967,6 +937,21 @@ function handleNotePointerUp() {
     'pointerup',
     handleNotePointerUp
   )
+}
+
+function goToIntro() {
+  if (
+    navigateWithTransition
+  ) {
+    navigateWithTransition(
+      '/intro'
+    )
+
+    return
+  }
+
+  window.location.href =
+    '/intro'
 }
 
 function goToAbout() {
@@ -2637,59 +2622,10 @@ onBeforeUnmount(() => {
 }
 
 /* =========================================
-   KEEP GOING
+   NAVIGATION
    ========================================= */
 
-.journal-sticker--keep-going {
-  position:
-    relative;
-
-  width:
-    150px;
-
-  height:
-    120px;
-
-  flex:
-    0 0 auto;
-
-  flex-direction:
-    column;
-
-  background:
-    #8e66a9;
-
-  color:
-    #fff;
-
-  clip-path:
-    polygon(
-      5% 9%,
-      84% 0,
-      100% 19%,
-      94% 90%,
-      74% 100%,
-      0 84%
-    );
-
-  transform:
-    rotate(7deg);
-}
-
-.journal-sticker--keep-going strong {
-  font-family:
-    'Coda Caption',
-    sans-serif;
-
-  font-size:
-    1.35rem;
-}
-
-/* =========================================
-   NEXT ENTRY
-   ========================================= */
-
-.journal-home__continue {
+.journal-home__navigation {
   display:
     flex;
 
@@ -2700,100 +2636,15 @@ onBeforeUnmount(() => {
     space-between;
 
   gap:
-    3rem;
-
-  margin:
-    calc(var(--journal-line-step) * 0.5)
-    0;
+    1rem;
 
   padding:
-    calc(var(--journal-line-step) * 1.25)
-    clamp(1.5rem, 4vw, 3.5rem);
-
-  border:
-    1px solid
-    rgba(35, 36, 36, 0.14);
-
-  background:
-    rgba(255, 255, 255, 0.2);
-
-  box-shadow:
-    0 16px 28px
-    rgba(35, 36, 36, 0.07);
+    2rem
+    0
+    1rem;
 }
 
-.journal-home__continue-note {
-  flex:
-    1 1 auto;
-
-  min-width:
-    0;
-
-  max-width:
-    700px;
-}
-
-.journal-home__continue-small {
-  display:
-    block;
-
-  margin-bottom:
-    0.65rem;
-
-  font-family:
-    'Google Sans Code',
-    monospace;
-
-  font-size:
-    0.67rem;
-
-  letter-spacing:
-    0.16em;
-
-  opacity:
-    0.44;
-}
-
-.journal-home__continue h2 {
-  max-width:
-    14ch;
-
-  margin:
-    0;
-
-  font-family:
-    'Coda Caption',
-    sans-serif;
-
-  font-size:
-    clamp(2rem, 4vw, 3.8rem);
-
-  line-height:
-    1.04;
-
-  letter-spacing:
-    -0.035em;
-}
-
-.journal-home__continue p {
-  max-width:
-    38rem;
-
-  margin:
-    1rem 0 0;
-
-  font-family:
-    'Crafty Girls',
-    cursive;
-
-  font-size:
-    clamp(1.05rem, 1.4vw, 1.25rem);
-
-  line-height:
-    1.5;
-}
-
-.journal-home__turn-button {
+.journal-home__nav-button {
   display:
     inline-flex;
 
@@ -2801,24 +2652,21 @@ onBeforeUnmount(() => {
     center;
 
   gap:
-    1rem;
-
-  margin-top:
-    1.5rem;
+    0.85rem;
 
   padding:
     0.8rem
-    1.1rem;
+    1rem;
 
   border:
     1px solid
-    rgba(35, 36, 36, 0.2);
+    rgba(35, 36, 36, 0.18);
 
   background:
-    #473824;
+    rgba(255, 255, 255, 0.2);
 
   color:
-    #dedede;
+    #473824;
 
   cursor:
     pointer;
@@ -2828,32 +2676,34 @@ onBeforeUnmount(() => {
     monospace;
 
   font-size:
-    0.72rem;
+    0.65rem;
+
+  font-weight:
+    700;
 
   letter-spacing:
-    0.12em;
+    0.1em;
 
   transition:
     transform 160ms ease,
     box-shadow 160ms ease;
 }
 
-.journal-home__turn-button:hover {
+.journal-home__nav-button:hover {
   transform:
-    translateY(-2px)
-    rotate(-0.5deg);
+    translateY(-2px);
 
   box-shadow:
-    0 8px 16px
-    rgba(35, 36, 36, 0.12);
+    0 7px 14px
+    rgba(35, 36, 36, 0.08);
 }
 
-.journal-home__turn-button strong {
-  color:
-    #c7c68e;
+.journal-home__nav-button--back {
+  background:
+    #473824;
 
-  font-size:
-    1.15rem;
+  color:
+    #dedede;
 }
 
 /* =========================================
@@ -3010,17 +2860,17 @@ onBeforeUnmount(() => {
       min(78vw, 290px);
   }
 
-  .journal-home__continue {
+  .journal-home__navigation {
     align-items:
-      flex-start;
+      stretch;
 
     flex-direction:
       column;
   }
 
-  .journal-sticker--keep-going {
-    align-self:
-      flex-end;
+  .journal-home__nav-button {
+    justify-content:
+      center;
   }
 
   .journal-home__footer {

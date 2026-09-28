@@ -498,6 +498,7 @@
             <article
               class="journal-about__interest-card journal-about__interest-card--music"
             >
+
               <div class="journal-about__interest-icon">
                 🎵
               </div>
@@ -630,72 +631,21 @@
 
           <button
             type="button"
-            class="journal-about__back-button"
+            class="journal-about__nav-button journal-about__nav-button--back"
             @click="goToHome"
           >
-            <strong>
-              ←
-            </strong>
-
-            <span>
-              BACK TO ENTRY 01
-            </span>
+            <span>←</span>
+            BACK TO HOME
           </button>
 
-          <!-- =========================================
-               NEXT ENTRY
-               ========================================= -->
-
-          <section class="journal-about__continue">
-
-            <div class="journal-about__continue-copy">
-
-              <span class="journal-about__continue-small">
-                NEXT ENTRY
-              </span>
-
-              <h2>
-                Okay, enough about me.
-              </h2>
-
-              <p>
-                Let’s look at the things I’ve actually built.
-              </p>
-
-              <button
-                type="button"
-                class="journal-about__turn-button"
-                @click="goToProjects"
-              >
-                <span>
-                  VIEW PROJECTS
-                </span>
-
-                <strong>
-                  →
-                </strong>
-              </button>
-
-            </div>
-
-            <div
-              class="journal-sticker journal-sticker--projects"
-              aria-hidden="true"
-            >
-              <span>
-                NEXT
-              </span>
-
-              <strong>
-                PROJECTS
-              </strong>
-
-              <small>
-                ENTRY 03
-              </small>
-            </div>
-
-          </section>
+          <button
+            type="button"
+            class="journal-about__nav-button"
+            @click="goToProjects"
+          >
+            NEXT ENTRY
+            <span>→</span>
+          </button>
 
         </section>
 
@@ -1710,174 +1660,83 @@ function goToProjects() {
    ========================================= */
 
 .journal-about__navigation {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: clamp(3rem, 6vw, 5rem);
-}
+  display:
+    flex;
 
-.journal-about__back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  justify-self: start;
-  padding:
-    0.7rem
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
     1rem;
-  border:
-    1px solid
-    rgba(35, 36, 36, 0.2);
-  background:
-    rgba(255, 255, 255, 0.28);
-  color:
-    var(--welcome-brown);
-  cursor: pointer;
-  font-family: var(--font-google-code);
-  font-size: 0.68rem;
-  letter-spacing: 0.1em;
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    background 160ms ease;
-}
 
-.journal-about__back-button:hover {
-  background:
-    rgba(255, 255, 255, 0.42);
-  transform:
-    translateY(-2px)
-    rotate(0.5deg);
-  box-shadow:
-    0 7px 14px
-      rgba(35, 36, 36, 0.1);
-}
-
-.journal-about__back-button strong {
-  color: #8e66a9;
-  font-size: 1.05rem;
-}
-
-/* =========================================
-   NEXT ENTRY
-   ========================================= */
-
-.journal-about__continue {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
   padding:
-    clamp(2rem, 4vw, 3.5rem);
-  border:
-    1px solid
-    rgba(35, 36, 36, 0.14);
-  background:
-    rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 16px 28px
-      rgba(35, 36, 36, 0.07);
+    2rem
+    0
+    1rem;
 }
 
-.journal-about__continue-copy {
-  max-width: 42rem;
-}
+.journal-about__nav-button {
+  display:
+    inline-flex;
 
-.journal-about__continue-small {
-  font-family: var(--font-google-code);
-  font-size: 0.67rem;
-  letter-spacing: 0.16em;
-  opacity: 0.44;
-}
+  align-items:
+    center;
 
-.journal-about__continue h2 {
-  margin:
-    0.55rem 0;
-  font-family: var(--font-coda);
-  font-size: clamp(2rem, 4vw, 3.7rem);
-  line-height: 1;
-}
+  gap:
+    0.85rem;
 
-.journal-about__continue p {
-  margin: 0;
-  font-family: var(--font-crafty);
-  font-size: 1.18rem;
-  line-height: 1.5;
-}
-
-.journal-about__turn-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 1.5rem;
   padding:
     0.8rem
-    1.1rem;
+    1rem;
+
   border:
     1px solid
-    rgba(35, 36, 36, 0.2);
+    rgba(35, 36, 36, 0.18);
+
   background:
-    var(--welcome-brown);
+    rgba(255, 255, 255, 0.2);
+
   color:
-    #dedede;
-  cursor: pointer;
-  font-family: var(--font-google-code);
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
+    var(--welcome-brown);
+
+  cursor:
+    pointer;
+
+  font-family:
+    var(--font-google-code);
+
+  font-size:
+    0.65rem;
+
+  font-weight:
+    700;
+
+  letter-spacing:
+    0.1em;
+
   transition:
     transform 160ms ease,
     box-shadow 160ms ease;
 }
 
-.journal-about__turn-button:hover {
+.journal-about__nav-button:hover {
   transform:
-    translateY(-2px)
-    rotate(-0.5deg);
+    translateY(-2px);
+
   box-shadow:
-    0 8px 16px
-      rgba(35, 36, 36, 0.12);
+    0 7px 14px
+    rgba(35, 36, 36, 0.08);
 }
 
-.journal-about__turn-button strong {
-  color: #c7c68e;
-  font-size: 1.15rem;
-}
+.journal-about__nav-button--back {
+  background:
+    var(--welcome-brown);
 
-.journal-sticker--projects {
-  position: relative;
-  display: grid;
-  width: 8.5rem;
-  min-height: 8.5rem;
-  padding: 1rem;
-  align-content: center;
-  border-radius:
-    1rem
-    1.2rem
-    0.85rem
-    1.25rem;
-  background: #8e66a9;
-  color: #fff;
-  transform: rotate(7deg);
-  text-align: center;
-}
-
-.journal-sticker--projects span {
-  font-family: var(--font-google-code);
-  font-size: 0.56rem;
-  letter-spacing: 0.15em;
-}
-
-.journal-sticker--projects strong {
-  margin-top: 0.25rem;
-  font-family: var(--font-coda);
-  font-size: 1rem;
-}
-
-.journal-sticker--projects small {
-  margin-top: 0.45rem;
-  font-family: var(--font-google-code);
-  font-size: 0.48rem;
-  letter-spacing: 0.1em;
-  opacity: 0.68;
+  color:
+    #dedede;
 }
 
 /* =========================================
@@ -1933,15 +1792,6 @@ function goToProjects() {
 
   .journal-about__interest-grid {
     grid-template-columns: 1fr;
-  }
-
-  .journal-about__continue {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .journal-sticker--projects {
-    align-self: flex-end;
   }
 }
 
@@ -2006,12 +1856,16 @@ function goToProjects() {
   }
 
   .journal-about__navigation {
-    gap: 1.25rem;
+    align-items:
+      stretch;
+
+    flex-direction:
+      column;
   }
 
-  .journal-about__back-button {
-    width: 100%;
-    justify-content: center;
+  .journal-about__nav-button {
+    justify-content:
+      center;
   }
 
   .journal-about__footer {
