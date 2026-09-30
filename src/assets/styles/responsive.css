@@ -1,0 +1,1138 @@
+/* =========================================
+   PORTFOLIO — UNIFIED RESPONSIVE SYSTEM
+   ========================================= */
+
+/*
+ * This stylesheet loads AFTER main.css.
+ *
+ * Breakpoints:
+ * 960px  = tablet / compact desktop
+ * 720px  = mobile
+ * 480px  = small mobile
+ * 360px  = very small devices
+ *
+ * The immersive Welcome and Intro pages use
+ * normal document scrolling rather than their
+ * own nested scroll containers.
+ */
+
+
+/* =========================================
+   GLOBAL SAFETY
+   ========================================= */
+
+html,
+body,
+#app,
+main {
+  width: 100%;
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+main {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+/* =========================================
+   CONSISTENT PAGE WIDTHS
+   ========================================= */
+
+.journal-home__content,
+.journal-about__content,
+.projects-page__content,
+.skills-page__content,
+.resume-page__content,
+.contact-page__content {
+  width: min(92vw, 1180px) !important;
+  max-width: 1180px !important;
+  margin-inline: auto;
+}
+
+
+/* =========================================
+   UNIFIED SECTION DIVIDERS
+   ========================================= */
+
+/*
+ * Every normal page divider uses exactly
+ * the same structure:
+ *
+ * container
+ * └── one full-width span
+ *
+ * This prevents the old two-column divider
+ * rules from producing half-length lines.
+ */
+
+.journal-home__divider,
+.journal-about__divider,
+.projects-page__divider,
+.skills-page__divider,
+.resume-page__divider,
+.contact-page__divider {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  height: 1px !important;
+
+  margin:
+    clamp(2rem, 4vw, 3rem)
+    0 !important;
+
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  background: rgba(35, 36, 36, 0.22) !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/*
+ * The span is the actual visible line.
+ */
+
+.journal-home__divider span,
+.journal-about__divider span,
+.projects-page__divider span,
+.skills-page__divider span,
+.resume-page__divider span,
+.contact-page__divider span {
+  display: block !important;
+
+  width: 100% !important;
+  max-width: 100% !important;
+
+  height: 1px !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  border: 0 !important;
+
+  background: rgba(35, 36, 36, 0.22) !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/*
+ * Remove the old two-column divider behavior
+ * explicitly.
+ */
+
+.projects-page__divider,
+.skills-page__divider,
+.resume-page__divider,
+.contact-page__divider {
+  grid-template-columns: none !important;
+  gap: 0 !important;
+}
+
+
+/* =========================================
+   IMMERSIVE PAGES
+   ========================================= */
+
+/*
+ * Welcome and Intro must be allowed to grow
+ * vertically when the keyboard becomes taller
+ * than the viewport.
+ */
+
+.welcome-page,
+.intro-page {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+
+  height: auto !important;
+  min-height: 100svh;
+
+  overflow: visible !important;
+
+  overscroll-behavior-y: auto !important;
+}
+
+
+/*
+ * Let the paper/background grow with all of
+ * the content instead of forcing it into the
+ * viewport height.
+ */
+
+.welcome-page__paper,
+.intro-page__paper {
+  position: relative;
+  min-height: 100svh;
+  height: auto;
+}
+
+
+/*
+ * Content can grow beyond the viewport.
+ */
+
+.welcome-page__content,
+.intro-page__content {
+  min-height: 100svh;
+  height: auto;
+}
+
+
+/* =========================================
+   TABLET / COMPACT DESKTOP
+   960PX
+   ========================================= */
+
+@media (max-width: 960px) {
+
+  /* -----------------------------------------
+     CONTENT WIDTH
+     ----------------------------------------- */
+
+  .journal-home__content,
+  .journal-about__content,
+  .projects-page__content,
+  .skills-page__content,
+  .resume-page__content,
+  .contact-page__content {
+    width: 94vw !important;
+  }
+
+
+  /* -----------------------------------------
+     MAIN GRIDS
+     ----------------------------------------- */
+
+  .journal-home__hero,
+  .journal-home__facts,
+
+  .journal-about__hero,
+  .journal-about__who-layout,
+  .journal-about__timeline,
+  .journal-about__journey-bottom,
+  .journal-about__interest-grid,
+
+  .project-card,
+
+  .skills-grid,
+  .skills-page__journey,
+  .skills-page__philosophy,
+  .learning-grid,
+
+  .resume-section,
+  .resume-development,
+  .resume-entry,
+  .resume-timeline__item,
+  .resume-work,
+
+  .contact-page__main {
+    grid-template-columns: 1fr !important;
+  }
+
+
+  /* -----------------------------------------
+     HERO SECTIONS
+     ----------------------------------------- */
+
+  .projects-page__hero,
+  .skills-page__hero,
+  .resume-page__hero,
+  .contact-page__hero {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+
+
+  /* -----------------------------------------
+     HERO DECORATIONS
+     ----------------------------------------- */
+
+  .projects-page__archive-sticker,
+  .skills-page__toolbox-sticker,
+  .resume-page__resume-stamp,
+  .contact-page__mail-sticker {
+    align-self: flex-end !important;
+  }
+
+
+  /* -----------------------------------------
+     ABOUT
+     ----------------------------------------- */
+
+  .journal-about__hero-stickers {
+    width: min(100%, 470px) !important;
+    margin-inline: auto !important;
+  }
+
+
+  /* -----------------------------------------
+     SKILLS
+     ----------------------------------------- */
+
+  .skills-page__philosophy-sticker {
+    grid-column: auto !important;
+    width: min(100%, 10rem) !important;
+    justify-self: end !important;
+  }
+
+
+  /* -----------------------------------------
+     RESUME
+     ----------------------------------------- */
+
+  .resume-development__arrow {
+    position: static !important;
+    text-align: center !important;
+    transform: rotate(90deg) !important;
+  }
+
+  .resume-sheet__header {
+    flex-direction: column !important;
+  }
+
+  .resume-sheet__contact {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+
+  /* -----------------------------------------
+     EDITOR GRIDS
+     ----------------------------------------- */
+
+  .project-card__editor-grid,
+  .resume-editor__grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .project-card__editor-field--wide,
+  .resume-editor__field--wide {
+    grid-column: auto !important;
+  }
+
+
+  /* -----------------------------------------
+     IMMERSIVE CONTENT
+     ----------------------------------------- */
+
+  /*
+   * Stop vertically centering the entire
+   * Welcome/Intro interface at compact widths.
+   */
+
+  .welcome-page__content,
+  .intro-page__content {
+    width: 100%;
+    max-width: 100%;
+
+    min-height: auto !important;
+
+    place-content: start center !important;
+
+    padding-top: clamp(2rem, 8vh, 4.5rem) !important;
+    padding-bottom: clamp(4rem, 10vh, 6rem) !important;
+  }
+
+
+  /* -----------------------------------------
+     IMMERSIVE KEYBOARDS
+     ----------------------------------------- */
+
+  .welcome-keyboard,
+  .intro-keyboard {
+    width: min(96vw, 900px) !important;
+    max-width: 96vw !important;
+  }
+}
+
+
+/* =========================================
+   MOBILE
+   720PX
+   ========================================= */
+
+@media (max-width: 720px) {
+
+  /* -----------------------------------------
+     CONTENT WIDTH
+     ----------------------------------------- */
+
+  .journal-home__content,
+  .journal-about__content,
+  .projects-page__content,
+  .skills-page__content,
+  .resume-page__content,
+  .contact-page__content {
+    width: 94vw !important;
+  }
+
+
+  /* -----------------------------------------
+     PAGE HEADERS
+     ----------------------------------------- */
+
+  .journal-home__header,
+  .journal-about__header,
+  .projects-page__header,
+  .skills-page__header,
+  .resume-page__header,
+  .contact-page__header {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+    gap: 0.8rem !important;
+  }
+
+  .journal-home__date,
+  .journal-about__date,
+  .projects-page__date,
+  .skills-page__date,
+  .resume-page__date,
+  .contact-page__date {
+    text-align: left !important;
+  }
+
+
+  /* -----------------------------------------
+     HOME
+     ----------------------------------------- */
+
+  .journal-home__continue {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .journal-home__corner-sticker {
+    align-self: flex-end !important;
+  }
+
+
+  /* -----------------------------------------
+     ABOUT
+     ----------------------------------------- */
+
+  .journal-about__section-heading {
+    flex-wrap: wrap !important;
+  }
+
+  .journal-about__mini-note {
+    width: min(100%, 20rem) !important;
+    max-width: 20rem !important;
+    justify-self: start !important;
+  }
+
+
+  /* -----------------------------------------
+     SKILLS
+     ----------------------------------------- */
+
+  .skills-page__section-heading,
+  .skills-page__learning-heading {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .skills-page__tiny-note {
+    text-align: left !important;
+    transform: rotate(-4deg) !important;
+  }
+
+  .skills-page__journey-note {
+    width: auto !important;
+    justify-self: stretch !important;
+  }
+
+  .skills-page__philosophy {
+    grid-template-columns: 1fr !important;
+  }
+
+  .skills-page__philosophy-sticker {
+    grid-column: auto !important;
+    justify-self: center !important;
+  }
+
+
+  /* -----------------------------------------
+     PROJECTS
+     ----------------------------------------- */
+
+  .projects-page__editor-controls {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .projects-page__editor-button {
+    justify-content: center !important;
+  }
+
+  .project-card {
+    padding: 1.25rem !important;
+  }
+
+  .project-card__top {
+    top: -0.8rem !important;
+    left: 0.8rem !important;
+    right: 0.8rem !important;
+
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .project-card__type {
+    align-self: flex-end !important;
+  }
+
+  .project-card__editor-toolbar {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .project-card__heading {
+    align-items: flex-start !important;
+  }
+
+
+  /* -----------------------------------------
+     RESUME
+     ----------------------------------------- */
+
+  .resume-page__actions {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .resume-page__action-button {
+    justify-content: center !important;
+  }
+
+  .resume-sheet {
+    padding: 1.4rem !important;
+  }
+
+  .resume-sheet__header h2 {
+    font-size: clamp(2.4rem, 13vw, 4rem) !important;
+  }
+
+  .resume-skills-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .resume-page__note {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .resume-page__note-sticker {
+    align-self: flex-end !important;
+  }
+
+  .resume-working-style-editor__item {
+    grid-template-columns: 1fr !important;
+  }
+
+
+  /* -----------------------------------------
+     CONTACT
+     ----------------------------------------- */
+
+  .contact-page__form-side {
+    width: 100% !important;
+  }
+
+  .contact-form {
+    transform: none !important;
+  }
+
+  .contact-form__submit-area {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .contact-form__submit {
+    justify-content: center !important;
+  }
+
+  .contact-form__submit-area > span {
+    text-align: left !important;
+  }
+
+  .contact-form__field-footer {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .contact-form__success {
+    grid-template-columns: 1fr !important;
+  }
+
+  .contact-page__little-note {
+    align-items: flex-start !important;
+    flex-direction: column !important;
+  }
+
+  .contact-page__note-sticker {
+    align-self: flex-end !important;
+  }
+
+
+  /* -----------------------------------------
+     PAGE NAVIGATION
+     ----------------------------------------- */
+
+  .journal-home__navigation,
+  .journal-about__navigation,
+  .projects-page__navigation,
+  .skills-page__navigation,
+  .resume-page__navigation,
+  .contact-page__navigation {
+    align-items: stretch !important;
+    flex-direction: column !important;
+  }
+
+  .journal-home__nav-button,
+  .journal-about__nav-button,
+  .projects-page__nav-button,
+  .skills-page__nav-button,
+  .resume-page__nav-button,
+  .contact-page__nav-button {
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+
+  /* -----------------------------------------
+     PAGE FOOTERS
+     ----------------------------------------- */
+
+  .journal-home__footer,
+  .journal-about__footer,
+  .projects-page__footer,
+  .skills-page__footer,
+  .resume-page__footer,
+  .contact-page__footer {
+    flex-direction: column !important;
+  }
+
+
+  /* =========================================
+     NAVBAR
+     ========================================= */
+
+  .navbar {
+    width: calc(100% - 1rem) !important;
+    margin-top: 0.8rem !important;
+  }
+
+  .navbar__links {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.25rem !important;
+  }
+
+  .navbar__link {
+    height: 2.7rem !important;
+  }
+
+  .navbar__letter {
+    font-size: 0.78rem !important;
+  }
+
+  .navbar__link:hover .navbar__letter,
+  .navbar__link:focus-visible .navbar__letter {
+    font-size: 0.95rem !important;
+  }
+
+  .navbar__link.is-active .navbar__letter,
+  .navbar__link.is-active:hover .navbar__letter,
+  .navbar__link.is-active:focus-visible .navbar__letter {
+    font-size: 1.28rem !important;
+  }
+
+
+  /* -----------------------------------------
+     WELCOME / INTRO TITLES
+     ----------------------------------------- */
+
+  .welcome-page__title,
+  .intro-page__title {
+    font-size: clamp(3rem, 15vw, 6rem) !important;
+    max-width: 100%;
+  }
+
+
+  /* -----------------------------------------
+     WELCOME PROMPT
+     ----------------------------------------- */
+
+  .welcome-page__prompt {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    gap: 0.4rem !important;
+
+    flex-wrap: wrap !important;
+  }
+
+  .welcome-page__slot {
+    width: clamp(2.25rem, 11vw, 3.1rem) !important;
+  }
+
+
+  /* -----------------------------------------
+     INTRO NAME
+     ----------------------------------------- */
+
+  .intro-page__name-slots {
+    column-gap: clamp(0.25rem, 1.4vw, 0.55rem) !important;
+    row-gap: 0.65rem !important;
+  }
+
+  .intro-page__name-slot {
+    width: clamp(1.75rem, 8vw, 2.8rem) !important;
+  }
+
+
+  /* =========================================
+     CUSTOM KEYBOARD — MOBILE
+     ========================================= */
+
+  .welcome-keyboard,
+  .intro-keyboard {
+    width: 96vw !important;
+    max-width: 96vw !important;
+  }
+
+  .welcome-keyboard__row,
+  .intro-keyboard__row {
+    width: 100% !important;
+
+    flex-wrap: wrap !important;
+
+    justify-content: center !important;
+
+    overflow: visible !important;
+
+    padding-inline: 0 !important;
+
+    row-gap: 0.3rem !important;
+  }
+
+  .welcome-keyboard__row--numbers,
+  .intro-keyboard__row--numbers {
+    justify-content: center !important;
+    overflow: visible !important;
+    padding-bottom: 0 !important;
+  }
+
+  .welcome-keyboard__row--offset,
+  .welcome-keyboard__row--offset-large,
+  .intro-keyboard__row--offset,
+  .intro-keyboard__row--offset-large {
+    padding-inline: 0 !important;
+  }
+
+  .welcome-key,
+  .intro-key {
+    min-width: clamp(1.65rem, 7vw, 2.45rem) !important;
+    min-height: clamp(2rem, 8vw, 2.7rem) !important;
+
+    padding: 0.25rem 0.28rem !important;
+
+    font-size: clamp(0.62rem, 2vw, 0.8rem) !important;
+  }
+
+  .welcome-key--small,
+  .intro-key--small {
+    min-width: clamp(1.55rem, 6vw, 2.15rem) !important;
+  }
+
+  .welcome-key--modifier,
+  .intro-key--modifier {
+    min-width: clamp(3.35rem, 15vw, 4.5rem) !important;
+  }
+
+  .welcome-key--space,
+  .intro-key--space {
+    flex: 1 1 7rem !important;
+    max-width: 11rem !important;
+  }
+
+  .welcome-key--backspace,
+  .intro-key--backspace {
+    min-width: clamp(3.8rem, 18vw, 5rem) !important;
+  }
+}
+
+
+/* =========================================
+   SMALL MOBILE
+   480PX
+   ========================================= */
+
+@media (max-width: 480px) {
+
+  /* -----------------------------------------
+     CONTENT
+     ----------------------------------------- */
+
+  .journal-home__content,
+  .journal-about__content,
+  .projects-page__content,
+  .skills-page__content,
+  .resume-page__content,
+  .contact-page__content {
+    width: 96vw !important;
+  }
+
+
+  /* -----------------------------------------
+     PAGE TITLES
+     ----------------------------------------- */
+
+  .journal-home__title,
+  .journal-about__title,
+  .projects-page__title,
+  .skills-page__title,
+  .resume-page__title,
+  .contact-page__title {
+    font-size: clamp(2.8rem, 15vw, 5.2rem) !important;
+    line-height: 0.9 !important;
+  }
+
+
+  /* -----------------------------------------
+     CARDS / FORMS
+     ----------------------------------------- */
+
+  .project-card,
+  .resume-sheet,
+  .contact-form {
+    padding: 1rem !important;
+  }
+
+  .contact-form__field input,
+  .contact-form__field select,
+  .contact-form__field textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+
+  /* -----------------------------------------
+     CONTACT CARDS
+     ----------------------------------------- */
+
+  .contact-card {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr)
+      auto !important;
+
+    min-width: 0 !important;
+  }
+
+  .contact-card span,
+  .contact-card strong {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+
+
+  /* -----------------------------------------
+     NAVBAR
+     ----------------------------------------- */
+
+  .navbar {
+    width: calc(100% - 0.7rem) !important;
+  }
+
+  .navbar__links {
+    gap: 0.15rem !important;
+  }
+
+  .navbar__link {
+    height: 2.5rem !important;
+  }
+
+  .navbar__letter {
+    font-size: 0.7rem !important;
+  }
+
+  .navbar__link:hover .navbar__letter,
+  .navbar__link:focus-visible .navbar__letter {
+    font-size: 0.84rem !important;
+  }
+
+  .navbar__link.is-active .navbar__letter,
+  .navbar__link.is-active:hover .navbar__letter,
+  .navbar__link.is-active:focus-visible .navbar__letter {
+    font-size: 1.12rem !important;
+  }
+
+
+  /* -----------------------------------------
+     IMMERSIVE PAGES
+     ----------------------------------------- */
+
+  .welcome-page__content,
+  .intro-page__content {
+    padding-inline: 0.7rem !important;
+    padding-top: 1.75rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .welcome-page__title,
+  .intro-page__title {
+    font-size: clamp(2.7rem, 16vw, 5rem) !important;
+  }
+
+  .welcome-page__hint,
+  .intro-page__mode-hint,
+  .intro-next__hint {
+    max-width: 94vw !important;
+    overflow-wrap: anywhere;
+  }
+
+
+  /* -----------------------------------------
+     SMALL KEYBOARDS
+     ----------------------------------------- */
+
+  .welcome-keyboard,
+  .intro-keyboard {
+    width: 96vw !important;
+    max-width: 96vw !important;
+  }
+
+  .welcome-keyboard__row,
+  .intro-keyboard__row {
+    gap: 0.16rem !important;
+    row-gap: 0.28rem !important;
+  }
+
+  .welcome-key,
+  .intro-key {
+    min-width: clamp(1.55rem, 7.2vw, 2rem) !important;
+    min-height: clamp(1.9rem, 8vw, 2.35rem) !important;
+
+    padding: 0.2rem 0.22rem !important;
+
+    border-radius: 0.45rem !important;
+
+    font-size: clamp(0.58rem, 1.95vw, 0.7rem) !important;
+  }
+
+  .welcome-key--small,
+  .intro-key--small {
+    min-width: clamp(1.45rem, 6.5vw, 1.85rem) !important;
+  }
+
+  .welcome-key--modifier,
+  .intro-key--modifier {
+    min-width: clamp(3rem, 15vw, 4rem) !important;
+  }
+
+  .welcome-key--space,
+  .intro-key--space {
+    flex-basis: 6rem !important;
+    max-width: 9rem !important;
+  }
+
+  .welcome-key--backspace,
+  .intro-key--backspace {
+    min-width: clamp(3.4rem, 18vw, 4.5rem) !important;
+    font-size: 0.9rem !important;
+  }
+
+
+  /* -----------------------------------------
+     ABOUT STICKERS
+     ----------------------------------------- */
+
+  .journal-about__hero-stickers {
+    width: 100% !important;
+    min-height: 230px !important;
+  }
+
+  .journal-sticker--hello {
+    right: 0.4rem !important;
+  }
+
+  .journal-sticker--two-cancers {
+    left: 0 !important;
+  }
+
+  .journal-sticker--anxious {
+    right: 0 !important;
+  }
+
+  .journal-sticker--name,
+  .journal-sticker--random {
+    margin-left: 2rem !important;
+  }
+
+  .journal-about__mini-note {
+    width: 100% !important;
+    max-width: 18rem !important;
+  }
+
+
+  /* -----------------------------------------
+     TEXT WRAPPING
+     ----------------------------------------- */
+
+  .resume-sheet__contact,
+  .resume-sheet__contact a {
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
+}
+
+
+/* =========================================
+   VERY SMALL DEVICES
+   360PX
+   ========================================= */
+
+@media (max-width: 360px) {
+
+  /* -----------------------------------------
+     NAVBAR
+     ----------------------------------------- */
+
+  .navbar__letter {
+    font-size: 0.64rem !important;
+  }
+
+  .navbar__link:hover .navbar__letter,
+  .navbar__link:focus-visible .navbar__letter {
+    font-size: 0.76rem !important;
+  }
+
+  .navbar__link.is-active .navbar__letter,
+  .navbar__link.is-active:hover .navbar__letter,
+  .navbar__link.is-active:focus-visible .navbar__letter {
+    font-size: 1rem !important;
+  }
+
+
+  /* -----------------------------------------
+     IMMERSIVE TITLES
+     ----------------------------------------- */
+
+  .welcome-page__title,
+  .intro-page__title {
+    font-size: clamp(2.45rem, 17vw, 4.5rem) !important;
+  }
+
+
+  /* -----------------------------------------
+     KEYBOARD
+     ----------------------------------------- */
+
+  .welcome-key,
+  .intro-key {
+    min-width: 1.5rem !important;
+    min-height: 1.8rem !important;
+
+    padding-inline: 0.16rem !important;
+
+    font-size: 0.56rem !important;
+  }
+
+  .welcome-key--small,
+  .intro-key--small {
+    min-width: 1.4rem !important;
+  }
+
+  .welcome-key--modifier,
+  .intro-key--modifier {
+    min-width: 2.8rem !important;
+  }
+
+  .welcome-key--space,
+  .intro-key--space {
+    flex-basis: 5.5rem !important;
+    max-width: 8rem !important;
+  }
+
+  .welcome-key--backspace,
+  .intro-key--backspace {
+    min-width: 3.25rem !important;
+  }
+
+
+  /* -----------------------------------------
+     PAGE CONTENT
+     ----------------------------------------- */
+
+  .journal-home__content,
+  .journal-about__content,
+  .projects-page__content,
+  .skills-page__content,
+  .resume-page__content,
+  .contact-page__content {
+    width: 97vw !important;
+  }
+}
+
+
+/* =========================================
+   SHORT VIEWPORTS / LANDSCAPE PHONES
+   ========================================= */
+
+@media (max-height: 760px) {
+
+  /*
+   * Short screens should start the immersive
+   * pages near the top rather than trying to
+   * vertically center everything.
+   */
+
+  .welcome-page__content,
+  .intro-page__content {
+    place-content: start center !important;
+
+    min-height: auto !important;
+
+    padding-top: 1.5rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .welcome-page__prompt,
+  .welcome-keyboard,
+  .intro-keyboard {
+    margin-top: 1.5rem;
+  }
+}
+
+
+/* =========================================
+   REDUCED MOTION
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .welcome-page,
+  .intro-page {
+    scroll-behavior: auto !important;
+  }
+}
