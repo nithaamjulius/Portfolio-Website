@@ -12,6 +12,16 @@
       <Footer />
     </template>
 
+    <!-- =======================================
+         GLOBAL MUSIC PLAYER
+         ======================================= -->
+
+    <MusicPlayer />
+
+    <!-- =======================================
+         PAPER TRANSITION
+         ======================================= -->
+
     <Transition name="paper-transition">
       <div
         v-if="pageTransition.active"
@@ -34,10 +44,12 @@
 
 <script setup>
 import { nextTick, onBeforeUnmount, onMounted, provide, reactive } from "vue";
+
 import { useRoute, useRouter } from "vue-router";
 
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
+import MusicPlayer from "./components/MusicPlayer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -49,10 +61,14 @@ const pageTransition = reactive({
 
 const crumbs = Array.from({ length: 18 }, (_, index) => ({
   id: index,
+
   style: {
     "--crumb-left": `${12 + ((index * 17) % 76)}%`,
+
     "--crumb-top": `${14 + ((index * 29) % 70)}%`,
+
     "--crumb-delay": `${(index % 6) * 45}ms`,
+
     "--crumb-rotate": `${-24 + ((index * 31) % 70)}deg`,
   },
 }));
@@ -70,6 +86,7 @@ const navigateWithTransition = async (path) => {
   }
 
   pageTransition.active = true;
+
   pageTransition.phase = "crumple";
 
   await sleep(720);
@@ -83,6 +100,7 @@ const navigateWithTransition = async (path) => {
   await sleep(900);
 
   pageTransition.active = false;
+
   pageTransition.phase = "idle";
 };
 
