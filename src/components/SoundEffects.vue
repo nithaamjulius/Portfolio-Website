@@ -1,20 +1,18 @@
+
 <template>
   <div class="sound-effects">
+
+    <!-- CHARACTER BUTTON -->
+
     <button
       class="sound-effects__character"
       type="button"
-      :aria-label="
-        soundEnabled
-          ? 'Turn sound effects off'
-          : 'Turn sound effects on'
-      "
-      :aria-pressed="soundEnabled"
-      @click="toggleSoundEffects"
+      aria-label="Open sound effects question"
+      aria-haspopup="dialog"
+      :aria-expanded="isSoundPromptOpen"
+      @click="openSoundPrompt"
     >
-      <span
-        class="sound-effects__character-frame"
-        aria-hidden="true"
-      >
+      <span class="sound-effects__character-frame" aria-hidden="true">
         <img
           class="sound-effects__character-image"
           :src="characterImage"
@@ -24,7 +22,78 @@
       </span>
     </button>
 
-    <!-- Short voice clips and sound effects -->
+    <!-- PLAYFUL MUTE CONFIRMATION -->
+
+    <div
+      v-if="isSoundPromptOpen"
+      class="sound-effects__dialog-backdrop"
+      @click.self="closeSoundPrompt"
+    >
+      <section
+        class="sound-effects__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="sound-effects-dialog-title"
+        aria-describedby="sound-effects-dialog-copy"
+        tabindex="-1"
+        @keydown.esc.stop.prevent="closeSoundPrompt"
+      >
+        <span
+          class="sound-effects__dialog-tape"
+          aria-hidden="true"
+        ></span>
+
+        <p class="sound-effects__dialog-eyebrow">
+          A VERY IMPORTANT QUESTION
+        </p>
+
+        <span
+          class="sound-effects__dialog-face"
+          aria-hidden="true"
+        >
+          ಠ_ಠ
+        </span>
+
+        <h2
+          id="sound-effects-dialog-title"
+          class="sound-effects__dialog-title"
+        >
+          Wow, am I that annoying...
+        </h2>
+
+        <p
+          id="sound-effects-dialog-copy"
+          class="sound-effects__dialog-copy"
+        >
+          Should I shut Nithaam up?
+        </p>
+
+        <div class="sound-effects__dialog-actions">
+          <button
+            type="button"
+            class="sound-effects__choice sound-effects__choice--yes"
+            @click="confirmMute"
+          >
+            YES
+          </button>
+
+          <button
+            type="button"
+            class="sound-effects__choice sound-effects__choice--no"
+            @click="keepSoundOn"
+          >
+            NO
+          </button>
+        </div>
+
+        <p class="sound-effects__dialog-note">
+          Choose wisely. I have feelings, you know.
+        </p>
+      </section>
+    </div>
+
+    <!-- SOUND EFFECT PLAYER -->
+
     <audio
       ref="effectAudio"
       preload="none"
@@ -33,7 +102,8 @@
       @error="handleEffectError"
     ></audio>
 
-    <!-- Page songs -->
+    <!-- PAGE SONG PLAYER -->
+
     <audio
       ref="pageAudio"
       preload="none"
@@ -41,6 +111,7 @@
       @ended="handlePageEnded"
       @error="handlePageError"
     ></audio>
+
   </div>
 </template>
 
@@ -88,14 +159,10 @@ import pictureThree from '../assets/audio/final/character/home-picture/picture3.
 
 /* =========================================
    KEYBOARD SOUNDS
-   ========================================= */
 
-/*
- * alphabet.mp3 and numbers.mp3 are intentionally
- * not used for keyboard input.
- *
- * Those original files remain in the assets folder.
- */
+   Alphabet and number recordings are no longer
+   used for keyboard input.
+   ========================================= */
 
 import specialCharacterOne from '../assets/audio/final/keyboard/special-character1.mp3'
 import specialCharacterTwo from '../assets/audio/final/keyboard/special-character2.mp3'
@@ -106,7 +173,7 @@ import errorOne from '../assets/audio/final/keyboard/error1.mp3'
 import errorTwo from '../assets/audio/final/keyboard/error2.mp3'
 
 /* =========================================
-   TRANSITION
+   PAGE TRANSITION
    ========================================= */
 
 import paperCrunch from '../assets/audio/final/page-transitions/paper-crunch.mp3'
@@ -193,16 +260,15 @@ const activeEffectKey = ref('')
 const activePageKey = ref('')
 const pendingPageSong = ref('')
 
+/* Popup state */
+
+const isSoundPromptOpen = ref(false)
+
 let mouthTimer = null
 let routeSongTimer = null
 
 let lastSpecialCharacterIndex = -1
 let lastErrorIndex = -1
-
-/*
- * Existing action sounds continue cycling in order.
- * Keyboard sounds use separate random selection logic.
- */
 
 const cyclePositions = {
   portrait: 0,
@@ -330,7 +396,7 @@ const characterImage = computed(() => {
 })
 
 /* =========================================
-   GENERAL AUDIO HELPERS
+   AUDIO HELPERS
    ========================================= */
 
 function clearMouthTimer() {
@@ -362,10 +428,6 @@ function playCycle(group, keys) {
   playEffect(key)
 }
 
-/* =========================================
-   RANDOM KEYBOARD SOUNDS
-   ========================================= */
-
 function playRandomFromPool(group, keys) {
   if (!keys.length) return
 
@@ -378,7 +440,6 @@ function playRandomFromPool(group, keys) {
     Math.random() * keys.length
   )
 
-  // Avoid repeating the previous clip when possible.
   if (
     keys.length > 1 &&
     selectedIndex === previousIndex
@@ -442,7 +503,6 @@ function startTalkingAnimation() {
 
   isSinging.value = false
   isTalking.value = true
-
   talkFrameIndex.value = 0
 
   mouthTimer = window.setInterval(() => {
@@ -475,7 +535,6 @@ async function playEffect(key) {
 
   pendingPageSong.value = ''
 
-  // Voice clips take priority over page songs.
   if (pageAudio.value) {
     pageAudio.value.pause()
   }
@@ -568,14 +627,13 @@ function resumePendingSong() {
   }
 
   const key = pendingPageSong.value
-
   pendingPageSong.value = ''
 
   playPageSong(key)
 }
 
 /* =========================================
-   SOUND ON / OFF
+   LEGACY SOUND TOGGLE
    ========================================= */
 
 function toggleSoundEffects() {
@@ -595,9 +653,56 @@ function toggleSoundEffects() {
     }
 
     settleCharacter()
-
     return
   }
+
+  settleCharacter()
+
+  playPageSong(pageSongs[route.name])
+}
+
+/* =========================================
+   PLAYFUL MUTE CONFIRMATION
+   ========================================= */
+
+function openSoundPrompt() {
+  isSoundPromptOpen.value = true
+}
+
+function closeSoundPrompt() {
+  isSoundPromptOpen.value = false
+}
+
+function confirmMute() {
+  isSoundPromptOpen.value = false
+
+  // YES: silence all sound effects and page songs.
+  soundEnabled.value = false
+  pendingPageSong.value = ''
+
+  if (effectAudio.value) {
+    effectAudio.value.pause()
+    effectAudio.value.currentTime = 0
+  }
+
+  if (pageAudio.value) {
+    pageAudio.value.pause()
+    pageAudio.value.currentTime = 0
+  }
+
+  settleCharacter()
+}
+
+function keepSoundOn() {
+  isSoundPromptOpen.value = false
+
+  // NO: leave existing audio playing when sound is on.
+  if (soundEnabled.value) {
+    return
+  }
+
+  // If sound was already off, turn it back on.
+  soundEnabled.value = true
 
   settleCharacter()
 
@@ -692,7 +797,7 @@ watch(
 )
 
 /* =========================================
-   WELCOME / INTRO KEYBOARD SOUND SYSTEM
+   WELCOME / INTRO KEYBOARD SOUNDS
    ========================================= */
 
 const specialCharacters = new Set([
@@ -753,11 +858,6 @@ function isKeyboardCharacter(character) {
   )
 }
 
-/*
- * Count the currently displayed characters.
- * This count represents the input before the current
- * keypress has been rendered by Vue.
- */
 function getKeyboardInputState(
   target = null,
   forcedMode = null
@@ -826,16 +926,13 @@ function getKeyboardInputState(
 }
 
 /*
- * IMPORTANT:
- *
- * The actual character is checked after Vue has processed
- * the input. This avoids classifying a valid NEXT letter
- * as incorrect just because the DOM count hasn't updated yet.
- *
- * Successful input -> special-character sound.
- * Rejected NEXT input -> error sound.
- * Name limit -> silent.
+ * Correct NEXT character: special-character sound.
+ * Incorrect NEXT character: random error sound.
+ * Name input: special-character sound.
+ * Name input at 20 characters: silent.
+ * Backspace, Delete, Shift and Caps Lock: silent.
  */
+
 function playKeyboardCharacterSound(
   character,
   {
@@ -852,80 +949,49 @@ function playKeyboardCharacterSound(
     return
   }
 
-  const stateBefore = getKeyboardInputState(
+  const state = getKeyboardInputState(
     target,
     forcedMode
   )
 
-  if (!stateBefore) return
+  if (!state) return
 
-  const currentRoute = route.name
-  const previousCount = stateBefore.count
-  const currentMode = stateBefore.mode
+  /* NAME INPUT */
 
-  // Name input should never trigger an error at the limit.
-  if (
-    currentMode === 'name' &&
-    previousCount >= maximumNameLength
-  ) {
+  if (state.mode === 'name') {
+    if (state.count >= maximumNameLength) {
+      return
+    }
+
+    playRandomSpecialCharacter()
     return
   }
 
-  // Ignore extra typing after NEXT has been completed.
-  if (
-    currentMode === 'next' &&
-    previousCount >= keyboardTargetWord.length
-  ) {
+  /* NEXT INPUT */
+
+  if (state.count >= keyboardTargetWord.length) {
     return
   }
 
-  // Capture the pre-input mode and defer the decision
-  // until Vue has processed the keypress and updated the DOM.
-  window.setTimeout(() => {
-    if (
-      !soundEnabled.value ||
-      route.name !== currentRoute
-    ) {
-      return
-    }
+  if (
+    slotIndex !== null &&
+    slotIndex !== state.count
+  ) {
+    playRandomError()
+    return
+  }
 
-    const stateAfter = getKeyboardInputState(
-      target,
-      forcedMode
-    )
+  const expectedCharacter =
+    keyboardTargetWord[state.count]
 
-    if (!stateAfter) return
-
-    /*
-     * If the number of displayed characters increased,
-     * the page accepted this character.
-     */
-    if (stateAfter.count > previousCount) {
-      playRandomSpecialCharacter()
-      return
-    }
-
-    // Rejected input in the name field does not make an error.
-    if (currentMode === 'name') {
-      return
-    }
-
-    /*
-     * Only play the error sound when the NEXT prompt
-     * actually marks a slot as incorrect.
-     */
-    const wrongSlotSelector =
-      currentRoute === 'welcome'
-        ? '.welcome-page__slot.is-wrong'
-        : '.intro-next__slot.is-wrong'
-
-    const wrongSlot =
-      document.querySelector(wrongSlotSelector)
-
-    if (wrongSlot) {
-      playRandomError()
-    }
-  }, 0)
+  if (
+    character.toLowerCase() ===
+    expectedCharacter.toLowerCase()
+  ) {
+    playRandomSpecialCharacter()
+  } else {
+    playRandomError()
+  }
 }
 
 /* =========================================
@@ -935,7 +1001,6 @@ function playKeyboardCharacterSound(
 function getKeyboardCharacterFromButton(button) {
   if (!button) return null
 
-  // Shift and Backspace remain silent.
   if (
     button.matches(
       '.welcome-key--modifier, ' +
@@ -947,7 +1012,6 @@ function getKeyboardCharacterFromButton(button) {
     return null
   }
 
-  // Space is accepted when entering a name.
   if (
     button.matches(
       '.welcome-key--space, ' +
@@ -997,7 +1061,6 @@ function onGlobalKeydown(event) {
     return
   }
 
-  // Modifier and deletion keys stay silent.
   if (
     event.key === 'Shift' ||
     event.key === 'CapsLock' ||
@@ -1016,7 +1079,8 @@ function onGlobalKeydown(event) {
       ? event.target
       : null
 
-  // Avoid duplicate handling when Space activates a button.
+  // Prevent duplicate Space-key playback when
+  // the browser also activates an on-screen key.
   if (
     event.key === ' ' &&
     targetElement?.closest(
@@ -1034,9 +1098,7 @@ function onGlobalKeydown(event) {
 
   playKeyboardCharacterSound(
     event.key,
-    {
-      target: targetElement
-    }
+    { target: targetElement }
   )
 }
 
@@ -1052,13 +1114,16 @@ function onGlobalClick(event) {
 
   if (!target) return
 
+  // Do not trigger portfolio effects when
+  // the character or its popup is clicked.
   if (target.closest('.sound-effects')) return
 
   if (!soundEnabled.value) return
 
   resumePendingSong()
 
-  /* Welcome / Intro custom keyboard. */
+  /* Welcome and Intro keyboard buttons. */
+
   if (keyboardRoutes.has(route.name)) {
     const keyButton = target.closest(
       '.welcome-key, .intro-key'
@@ -1080,6 +1145,7 @@ function onGlobalClick(event) {
   }
 
   /* Home portrait. */
+
   if (
     route.name === 'home' &&
     target.closest('.journal-home__portrait-wrap')
@@ -1104,6 +1170,7 @@ function onGlobalClick(event) {
   const text = getText(action)
 
   /* Projects: add project. */
+
   if (
     route.name === 'projects' &&
     action.closest('.projects-page__editor-button--add')
@@ -1117,6 +1184,7 @@ function onGlobalClick(event) {
   }
 
   /* Projects: save changes. */
+
   if (
     route.name === 'projects' &&
     action.closest('.projects-page__editor-button--save')
@@ -1129,7 +1197,8 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Home / Projects / Resume edit buttons. */
+  /* Home / Projects / Resume editing. */
+
   const isHomeEdit =
     route.name === 'home' &&
     action.closest('.journal-home__edit-button')
@@ -1162,7 +1231,8 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Projects: replace screenshot. */
+  /* Projects: screenshot actions. */
+
   if (
     route.name === 'projects' &&
     target.closest('input[type="file"]')
@@ -1171,7 +1241,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Projects: remove screenshot. */
   if (
     route.name === 'projects' &&
     action.closest('.project-card__remove-image')
@@ -1180,7 +1249,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Projects: remove project. */
   if (
     route.name === 'projects' &&
     /remove/i.test(text) &&
@@ -1194,7 +1262,8 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Projects: GitHub link. */
+  /* Projects: GitHub and Live Demo. */
+
   if (
     route.name === 'projects' &&
     action.closest('.project-card__button--github')
@@ -1203,7 +1272,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Projects: Live Demo link. */
   if (
     route.name === 'projects' &&
     action.closest('.project-card__button--live')
@@ -1213,6 +1281,7 @@ function onGlobalClick(event) {
   }
 
   /* Resume: print / save PDF. */
+
   if (
     route.name === 'resume' &&
     action.closest('.resume-page__action-button') &&
@@ -1226,7 +1295,8 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Resume: add content. */
+  /* Resume: content editing. */
+
   if (
     route.name === 'resume' &&
     action.closest('.resume-editor__add-button')
@@ -1235,7 +1305,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Resume: remove content. */
   if (
     route.name === 'resume' &&
     action.closest('.resume-editor__remove-button')
@@ -1245,6 +1314,7 @@ function onGlobalClick(event) {
   }
 
   /* Contact: send note. */
+
   if (
     route.name === 'contact' &&
     /send note|sending note/i.test(text)
@@ -1257,7 +1327,8 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Contact: email. */
+  /* Contact: social links. */
+
   if (
     route.name === 'contact' &&
     action.closest('.contact-card--email')
@@ -1266,7 +1337,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Contact: GitHub. */
   if (
     route.name === 'contact' &&
     action.closest('.contact-card--github')
@@ -1275,7 +1345,6 @@ function onGlobalClick(event) {
     return
   }
 
-  /* Contact: LinkedIn. */
   if (
     route.name === 'contact' &&
     action.closest('.contact-card--linkedin')
@@ -1285,6 +1354,7 @@ function onGlobalClick(event) {
   }
 
   /* Stickers throughout the portfolio. */
+
   if (
     action.matches(
       '.journal-sticker, ' +
@@ -1330,6 +1400,7 @@ function onGlobalDrop(event) {
   resumePendingSong()
 
   /* Welcome: NEXT slots. */
+
   if (route.name === 'welcome') {
     const slot = target.closest(
       '.welcome-page__slot'
@@ -1353,6 +1424,7 @@ function onGlobalDrop(event) {
   }
 
   /* Intro: name area. */
+
   const nameArea = target.closest(
     '.intro-page__name-area'
   )
@@ -1367,6 +1439,7 @@ function onGlobalDrop(event) {
   }
 
   /* Intro: NEXT slots. */
+
   const nextSlot = target.closest(
     '.intro-next__slot'
   )
@@ -1397,7 +1470,6 @@ function onGlobalChange(event) {
       : null
 
   if (!target || !soundEnabled.value) return
-
   if (target.closest('.sound-effects')) return
 
   if (target.matches('select')) {
@@ -1453,7 +1525,6 @@ onMounted(() => {
     onTransitionFinished
   )
 
-  // Initial page song. Browsers may wait for user interaction.
   playPageSong(pageSongs[route.name])
 })
 
@@ -1505,48 +1576,29 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* =========================================
+   SOUND EFFECT CHARACTER
+   ========================================= */
+
 .sound-effects {
   position: fixed;
-
   left: clamp(1rem, 2.8vw, 2rem);
-
-  bottom: max(
-    1rem,
-    env(safe-area-inset-bottom)
-  );
-
+  bottom: max(1rem, env(safe-area-inset-bottom));
   z-index: 500;
-
   display: grid;
   justify-items: start;
-
   pointer-events: none;
 }
 
-/* =========================================
-   CHARACTER CONTROL
-   Same outer dimensions as the speaker.
-   ========================================= */
-
 .sound-effects__character {
   position: relative;
-
   display: grid;
   place-items: center;
-
-  width: clamp(
-    6rem,
-    9vw,
-    8.2rem
-  );
-
+  width: clamp(6rem, 9vw, 8.2rem);
   aspect-ratio: 1.42 / 1;
-
   padding: 0;
   border: 0;
-
   background: transparent;
-
   cursor: pointer;
   pointer-events: auto;
 
@@ -1573,38 +1625,23 @@ onBeforeUnmount(() => {
   border-radius: 0.7rem;
 }
 
-/* Same outer frame dimensions as the speaker sticker. */
-
 .sound-effects__character-frame {
   position: relative;
-
   display: grid;
-
   width: 100%;
   height: 100%;
-
   place-items: center;
-
   overflow: hidden;
 }
 
-/*
- * Use contain rather than 350% scaling:
- * the entire head image stays visible.
- */
-
 .sound-effects__character-image {
   display: block;
-
   width: 100%;
   height: 100%;
-
   max-width: 100%;
   max-height: 100%;
-
   object-fit: contain;
   object-position: center;
-
   pointer-events: none;
   user-select: none;
 }
@@ -1614,27 +1651,224 @@ onBeforeUnmount(() => {
 }
 
 /* =========================================
+   PLAYFUL MUTE POPUP
+   ========================================= */
+
+.sound-effects__dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: grid;
+  place-items: center;
+
+  width: 100vw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1.25rem;
+
+  background: rgba(35, 36, 36, 0.52);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  pointer-events: auto;
+
+  animation: sound-dialog-fade-in 180ms ease both;
+}
+
+.sound-effects__dialog {
+  position: relative;
+  width: min(100%, 27rem);
+  padding: clamp(1.8rem, 5vw, 2.6rem) 1.5rem 1.5rem;
+
+  overflow: visible;
+
+  color: #473824;
+  text-align: center;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 30px,
+      rgba(71, 56, 36, 0.07) 31px,
+      transparent 32px
+    ),
+    #dedede;
+
+  border: 1px solid rgba(71, 56, 36, 0.32);
+
+  box-shadow:
+    0 20px 55px rgba(0, 0, 0, 0.23),
+    5px 6px 0 rgba(199, 198, 142, 0.6);
+
+  transform: rotate(-1deg);
+
+  animation: sound-dialog-pop-in 250ms ease both;
+}
+
+.sound-effects__dialog-tape {
+  position: absolute;
+  top: -0.65rem;
+  left: 50%;
+
+  width: 5.5rem;
+  height: 1.25rem;
+
+  background: rgba(199, 198, 142, 0.85);
+
+  box-shadow: 0 2px 4px rgba(35, 36, 36, 0.08);
+
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+.sound-effects__dialog-eyebrow {
+  margin: 0 0 1.1rem;
+
+  font-family: var(--font-google-code, monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+
+  color: #8e66a9;
+}
+
+.sound-effects__dialog-face {
+  display: block;
+  margin-bottom: 0.6rem;
+
+  font-family: var(--font-google-code, monospace);
+  font-size: 2.1rem;
+  line-height: 1.2;
+
+  color: #473824;
+}
+
+.sound-effects__dialog-title {
+  margin: 0;
+
+  font-family: var(--font-crafty, cursive);
+  font-size: clamp(1.7rem, 5vw, 2.25rem);
+  font-weight: 400;
+  line-height: 1.25;
+
+  color: #473824;
+}
+
+.sound-effects__dialog-copy {
+  margin: 0.9rem 0 1.6rem;
+
+  font-family: var(--font-google-code, monospace);
+  font-size: 0.85rem;
+  line-height: 1.6;
+
+  color: rgba(71, 56, 36, 0.82);
+}
+
+.sound-effects__dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.sound-effects__choice {
+  min-width: 6.5rem;
+  padding: 0.8rem 1.2rem;
+
+  border: 1px solid rgba(71, 56, 36, 0.2);
+
+  font-family: var(--font-google-code, monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.sound-effects__choice:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(35, 36, 36, 0.12);
+}
+
+.sound-effects__choice:focus-visible {
+  outline: 2px solid #473824;
+  outline-offset: 3px;
+}
+
+.sound-effects__choice--yes {
+  background: #8e66a9;
+  color: #fff;
+}
+
+.sound-effects__choice--yes:hover {
+  background: #74518d;
+}
+
+.sound-effects__choice--no {
+  background: #c7c68e;
+  color: #473824;
+}
+
+.sound-effects__choice--no:hover {
+  background: #d3d29c;
+}
+
+.sound-effects__dialog-note {
+  margin: 1.3rem 0 0;
+
+  font-family: var(--font-bonbon, cursive);
+  font-size: 1.35rem;
+  line-height: 1.3;
+
+  color: rgba(71, 56, 36, 0.78);
+}
+
+/* =========================================
+   POPUP ANIMATIONS
+   ========================================= */
+
+@keyframes sound-dialog-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sound-dialog-pop-in {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* =========================================
    MOBILE
    ========================================= */
 
 @media (max-width: 720px) {
   .sound-effects {
     left: 0.7rem;
-
-    bottom: max(
-      0.7rem,
-      env(safe-area-inset-bottom)
-    );
+    bottom: max(0.7rem, env(safe-area-inset-bottom));
   }
 
   .sound-effects__character {
     width: 6.6rem;
   }
 }
-
-/* =========================================
-   SMALL MOBILE
-   ========================================= */
 
 @media (max-width: 480px) {
   .sound-effects {
@@ -1644,6 +1878,19 @@ onBeforeUnmount(() => {
   .sound-effects__character {
     width: 5.7rem;
   }
+
+  .sound-effects__dialog {
+    padding: 1.8rem 1rem 1.25rem;
+  }
+
+  .sound-effects__dialog-actions {
+    gap: 0.6rem;
+  }
+
+  .sound-effects__choice {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 /* =========================================
@@ -1651,8 +1898,14 @@ onBeforeUnmount(() => {
    ========================================= */
 
 @media (prefers-reduced-motion: reduce) {
-  .sound-effects__character {
+  .sound-effects__character,
+  .sound-effects__choice {
     transition: none;
+  }
+
+  .sound-effects__dialog-backdrop,
+  .sound-effects__dialog {
+    animation: none;
   }
 }
 </style>
