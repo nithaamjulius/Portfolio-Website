@@ -1,7 +1,7 @@
 ﻿# Final Audio Library
 
 These are organised copies of the portfolio audio assets.
-The named source clips and contact_audio folder are preserved.
+The temporary draft clips and `contact_audio` folder were removed after organising their audio assets into this library.
 
 ## Folders
 

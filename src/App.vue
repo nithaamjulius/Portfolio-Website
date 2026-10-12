@@ -12,16 +12,12 @@
       <Footer />
     </template>
 
-    <!-- =======================================
-         GLOBAL MUSIC PLAYER
-         ======================================= -->
-
     <MusicPlayer />
 
-    <!-- =======================================
-         PAPER TRANSITION
-         ======================================= -->
+    <!-- Character and website sound effects -->
+    <SoundEffects />
 
+    <!-- Paper transition -->
     <Transition name="paper-transition">
       <div
         v-if="pageTransition.active"
@@ -43,76 +39,114 @@
 </template>
 
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, provide, reactive } from "vue";
+import {
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  reactive
+} from 'vue'
 
-import { useRoute, useRouter } from "vue-router";
+import {
+  useRoute,
+  useRouter
+} from 'vue-router'
 
-import Navbar from "./components/Navbar.vue";
-import Footer from "./components/Footer.vue";
-import MusicPlayer from "./components/MusicPlayer.vue";
+import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
+import MusicPlayer from './components/MusicPlayer.vue'
+import SoundEffects from './components/SoundEffects.vue'
 
-const route = useRoute();
-const router = useRouter();
+const route = useRoute()
+const router = useRouter()
 
 const pageTransition = reactive({
   active: false,
-  phase: "idle",
-});
+  phase: 'idle'
+})
 
-const crumbs = Array.from({ length: 18 }, (_, index) => ({
-  id: index,
+const crumbs = Array.from(
+  { length: 18 },
+  (_, index) => ({
+    id: index,
 
-  style: {
-    "--crumb-left": `${12 + ((index * 17) % 76)}%`,
+    style: {
+      '--crumb-left':
+        `${12 + ((index * 17) % 76)}%`,
 
-    "--crumb-top": `${14 + ((index * 29) % 70)}%`,
+      '--crumb-top':
+        `${14 + ((index * 29) % 70)}%`,
 
-    "--crumb-delay": `${(index % 6) * 45}ms`,
+      '--crumb-delay':
+        `${(index % 6) * 45}ms`,
 
-    "--crumb-rotate": `${-24 + ((index * 31) % 70)}deg`,
-  },
-}));
+      '--crumb-rotate':
+        `${-24 + ((index * 31) % 70)}deg`
+    }
+  })
+)
 
-let transitionTimer = null;
+let transitionTimer = null
 
 const sleep = (duration) =>
   new Promise((resolve) => {
-    transitionTimer = window.setTimeout(resolve, duration);
-  });
+    transitionTimer = window.setTimeout(
+      resolve,
+      duration
+    )
+  })
 
 const navigateWithTransition = async (path) => {
-  if (pageTransition.active) {
-    return;
-  }
+  if (pageTransition.active) return
 
-  pageTransition.active = true;
+  // Crumple sound starts with the paper transition.
+  window.dispatchEvent(
+    new CustomEvent('portfolio:play-sound', {
+      detail: {
+        key: 'paper-crunch'
+      }
+    })
+  )
 
-  pageTransition.phase = "crumple";
+  pageTransition.active = true
+  pageTransition.phase = 'crumple'
 
-  await sleep(720);
+  await sleep(720)
 
-  await router.push(path);
+  await router.push(path)
+  await nextTick()
 
-  await nextTick();
+  pageTransition.phase = 'uncrumple'
 
-  pageTransition.phase = "uncrumple";
+  await sleep(900)
 
-  await sleep(900);
+  pageTransition.active = false
+  pageTransition.phase = 'idle'
 
-  pageTransition.active = false;
+  // Tell the sound-effects component the transition is finished.
+  window.dispatchEvent(
+    new CustomEvent('portfolio:transition-finished', {
+      detail: {
+        routeName: router.currentRoute.value.name
+      }
+    })
+  )
+}
 
-  pageTransition.phase = "idle";
-};
-
-provide("navigateWithTransition", navigateWithTransition);
+provide(
+  'navigateWithTransition',
+  navigateWithTransition
+)
 
 onMounted(() => {
-  document.documentElement.classList.add("portfolio-ready");
-});
+  document.documentElement.classList.add(
+    'portfolio-ready'
+  )
+})
 
 onBeforeUnmount(() => {
   if (transitionTimer) {
-    window.clearTimeout(transitionTimer);
+    window.clearTimeout(transitionTimer)
   }
-});
+})
 </script>
